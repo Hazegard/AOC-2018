@@ -43,3 +43,42 @@ const partOne = () => {
 };
 
 partOne();
+
+const partTwo = () => {
+    inputs.getDay(2).then((res) => {
+        const values = res.split('\n');
+        for (let i = 0; i < res.length - 1; i++) {
+            if (!values[i]) {
+                break;
+            }
+            const a = values[i].split('');
+            for (let j = i + 1; j < res.length; j++) {
+                if (!values[j]) {
+                    break;
+                }
+                const b = values[j].split('');
+                let test = 0;
+                for (let k = 0; k < a.length; k++) {
+                    if (a[k] !== b[k]) {
+                        test++;
+                    }
+                    if (test === 2) {
+                        break;
+                    }
+                }
+                if (test === 1) {
+                    const response = [];
+                    for (let u = 0; u < a.length; u++) {
+                        if (a[u] === b[u]) {
+                            response.push(a[u])
+                        }
+                    }
+                    console.log(a.join(''));
+                    console.log(response.join(''));
+                }
+            }
+        }
+    }).catch(err => console.log(err))
+};
+
+partTwo();
