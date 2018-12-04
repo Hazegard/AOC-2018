@@ -75,11 +75,11 @@ const partOne = () => {
       }
     );
     let maxSleep = 0;
-    let chosenGuard;
+    let chosenGuard = 0;
     Object.keys(sleepTime).forEach((id) => {
       const guard = sleepTime[id];
       if (guard.sleepTime > maxSleep) {
-        chosenGuard = id;
+        chosenGuard = parseInt(id);
         maxSleep = guard.sleepTime
       }
     });
@@ -90,7 +90,6 @@ const partOne = () => {
     Object.keys(sleepTime[chosenGuard].sleepMost).forEach((id) => {
       const val = sleepTime[chosenGuard].sleepMost[id]
       if (val > bestMinutes.occurence) {
-        console.log(id);
         bestMinutes.minute = parseInt(id);
         bestMinutes.occurence = parseInt(val)
       }
@@ -102,3 +101,54 @@ const partOne = () => {
 };
 
 partOne();
+
+const partTwo = () => {
+  inputs.getDay(4).then((res) => {
+    const lines = res.split('\n').sort();
+    const getMinute = (line) => {
+      return parseInt(line.split(':')[1].split(']')[0])
+    };
+    const time = {};
+    let start = 0;
+    let end = 0;
+    let guardId = 0;
+    lines.forEach(((line) => {
+        if (line.includes('begins shift')) {
+          guardId = parseInt(line.split('#')[1].split(' ')[0]);
+        } else if (line.includes('falls asleep')) {
+          start = getMinute(line)
+        } else if (line.includes('wakes up')) {
+          end = getMinute(line);
+          for (let i = start; i < end; i++) {
+            time[guardId] = time[guardId] || {};
+            time[guardId][i] = (time[guardId][i] || 0) + 1;
+          }
+        }
+      }
+    ));
+
+    let bestMinute = {
+      minute: 0,
+      occurence: 0,
+      guardId: 0,
+    };
+    Object.keys(time).forEach((id) => {
+      const guardId = parseInt(id);
+      const guard = time[guardId];
+      Object.keys(guard).forEach((min) => {
+        const minute = parseInt(min);
+        const occurence = parseInt(guard[minute]);
+        if (occurence > bestMinute.occurence) {
+          bestMinute = {
+            minute,
+            occurence,
+            guardId,
+          }
+        }
+      })
+    });
+    console.log(bestMinute.minute * bestMinute.guardId);
+  })
+};
+
+partTwo();
