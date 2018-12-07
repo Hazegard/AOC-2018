@@ -76,3 +76,31 @@ const partOne = () => {
 };
 
 partOne();
+
+const partTwo = () => {
+    inputs.getDay(6).then((res) => {
+        // const region = [];
+        let regionSize = 0;
+        const values = res.split('\n').map(e => [+e.split(',')[0], +e.split(',')[1].trim()]);
+        for (let i = -1000; i < 1000; i++) {
+            for (let j = -1000; j < 1000; j++) {
+                const dist = values.reduce((acc, curr) => {
+                    return acc + getDistance(curr, [i, j]);
+                }, 0);
+                if (dist < 10000) {
+                    regionSize++
+                    // region.push({
+                    //     totalDistance: dist,
+                    //     x: j,
+                    //     y: i,
+                    // });
+                }
+            }
+        }
+        console.log(regionSize);
+        // console.log(region);
+        // console.log(region.length);
+    })
+};
+
+partTwo();
