@@ -1,8 +1,8 @@
 const inputs = require('./Inputs');
 
-const partOne = () => {
+const partOne = (i) => {
     inputs.getDay(9).then((res) => {
-        const lastMarble = res.split(' ')[6];
+        const lastMarble = res.split(' ')[6] * i;
         const players = new Array(+res.split(' ')[0]).fill(0);
         const marbles = [];
         const marble0 = new Marble(0, 0, 0);
@@ -69,4 +69,8 @@ class Marble {
 
 }
 
-partOne();
+partOne(1);
+
+const partTwo = () => partOne(100);
+
+partTwo();
