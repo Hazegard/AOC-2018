@@ -66,3 +66,43 @@ class Node {
 }
 
 partOne();
+const partTwo = () => {
+
+    inputs.getDay(8).then((res) => {
+        const tree = res.split(' ').map(e => +e);
+
+        function part2() {
+            let nChildNodes = tree.shift();
+            let nMetadata = tree.shift();
+
+            if (nChildNodes) {
+                const chtr = [];
+                while (nChildNodes-- > 0) {
+                    chtr.push(part2());
+                }
+                const metr = [];
+                while (nMetadata-- > 0) {
+                    metr.push(tree.shift());
+                }
+                let response = 0;
+                for (const u of metr) {
+                    const ix = u - 1;
+                    if (ix >= 0 && ix < chtr.length) {
+                        response += chtr[ix];
+                    }
+                }
+                return response;
+            } else {
+                let response = 0;
+                while (nMetadata-- > 0) {
+                    response += tree.shift();
+                }
+                return response
+            }
+        }
+
+        console.log(part2());
+    });
+}
+
+partTwo()
