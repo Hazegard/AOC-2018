@@ -38,6 +38,7 @@ const partOne = () => {
       }
     });
     let lastSize = getSize(points) + 1;
+    let sec =0;
     while (true) {
       for (let i = 0; i < points.length; i++) {
         points[i].position.x += points[i].velocity.x;
@@ -53,6 +54,7 @@ const partOne = () => {
         break
       }
       lastSize = currSize;
+      sec++
     }
     const values = points.reduce((acc, curr) => {
       acc.push([curr.position.x, curr.position.y]);
@@ -72,6 +74,7 @@ const partOne = () => {
       draw[value[1]-minY][value[0]-minX] = full;
     }
     console.log(draw.map(e => e.join('')).join('\n'));
+    console.log(sec);
   })
     .catch(err => console.log(err));
 };
