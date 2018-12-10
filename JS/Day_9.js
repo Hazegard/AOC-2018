@@ -5,8 +5,7 @@ const partOne = (i) => {
         const lastMarble = res.split(' ')[6] * i;
         const players = new Array(+res.split(' ')[0]).fill(0);
         const marbles = [];
-        const marble0 = new Marble(0, 0, 0);
-        let currentMarble = marble0;
+        let currentMarble = new Marble(0, 0, 0);
         marbles.push(currentMarble);
         for (let i = 1; i <= lastMarble; i++) {
             if (i % 23 === 0) {
