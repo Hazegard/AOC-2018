@@ -8,10 +8,13 @@ const createFuelArray = (index, size, ID) => {
   return temp;
 };
 
+const prepareInput = () => {
+
+}
 const partOne = (squareSize) => {
   return inputs.getDay(11).then((res) => {
     res = +res;
-    const SIZE = 300;
+    const SIZE = 301;
     const fuel = new Array(squareSize);
 
     let maxPower = {
@@ -23,8 +26,8 @@ const partOne = (squareSize) => {
       fuel[i] = createFuelArray(i, SIZE, res)
     }
 
-    for (let i = 0; i < SIZE - squareSize; i++) {
-      for (let j = 0; j < SIZE - squareSize; j++) {
+    for (let i = 1; i < SIZE - squareSize; i++) {
+      for (let j = 1; j < SIZE - squareSize; j++) {
         let localTotal = 0;
         for (let k = 0; k < squareSize; k++) {
           for (let kk = 0; kk < squareSize; kk++) {
@@ -48,7 +51,7 @@ const partOne = (squareSize) => {
     .catch(err => console.log(err));
 };
 
-partOne(3).then((value)=>{
+partOne(3).then((value) => {
   console.log(value);
   console.log(`${value.x},${value.y}`)
 });
@@ -56,7 +59,7 @@ partOne(3).then((value)=>{
 
 const partTwo = () => {
   const P = [];
-  for (let i = 0; i < 300; i++) {
+  for (let i = 1; i < 301; i++) {
     P.push(partOne(i));
   }
   Promise.all(P).then((values) => {
