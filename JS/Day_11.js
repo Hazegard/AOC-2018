@@ -8,26 +8,27 @@ const createFuelArray = (index, size, ID) => {
   return temp;
 };
 
-const partOne = () => {
-  inputs.getDay(11).then((res) => {
+const partOne = (squareSize) => {
+  return inputs.getDay(11).then((res) => {
     res = +res;
     const SIZE = 300;
-    const fuel = new Array(3);
+    const fuel = new Array(squareSize);
 
     let maxPower = {
-      val: 0,
+      val: -Number.MAX_VALUE,
       x: 0, y: 0,
+      size: squareSize,
     };
     for (let i = 0; i < fuel.length; i++) {
       fuel[i] = createFuelArray(i, SIZE, res)
     }
 
-    for (let i = 0; i < SIZE - 3; i++) {
-      for (let j = 0; j < SIZE - 3; j++) {
+    for (let i = 0; i < SIZE - squareSize; i++) {
+      for (let j = 0; j < SIZE - squareSize; j++) {
         let localTotal = 0;
-        for (let k = 0; k < 3; k++) {
-          for (let kk = 0; kk < 3; kk++) {
-            localTotal += fuel[(i + k) % 3][j + kk];
+        for (let k = 0; k < squareSize; k++) {
+          for (let kk = 0; kk < squareSize; kk++) {
+            localTotal += fuel[(i + k) % squareSize][j + kk];
           }
         }
         if (localTotal > maxPower.val) {
@@ -35,15 +36,36 @@ const partOne = () => {
             val: localTotal,
             x: j,
             y: i,
+            size: squareSize,
           }
         }
       }
-      fuel.push(createFuelArray(i + 3, SIZE, res));
+      fuel.push(createFuelArray(i + squareSize, SIZE, res));
       fuel.shift();
     }
-    console.log(maxPower);
+    return Promise.resolve(maxPower)
   })
     .catch(err => console.log(err));
 };
 
-partOne();
+partOne(3).then((value)=>{
+  console.log(value);
+  console.log(`${value.x},${value.y}`)
+});
+
+
+const partTwo = () => {
+  const P = [];
+  for (let i = 0; i < 300; i++) {
+    P.push(partOne(i));
+  }
+  Promise.all(P).then((values) => {
+    const res = values.reduce((acc, curr) => {
+      return acc.val > curr.val ? acc : curr
+    });
+    console.log(res);
+    console.log(`${res.x},${res.y},${res.size}`)
+  });
+};
+
+partTwo();
