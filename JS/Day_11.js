@@ -8,9 +8,6 @@ const createFuelArray = (index, size, ID) => {
   return temp;
 };
 
-const prepareInput = () => {
-
-}
 const partOne = (squareSize) => {
   return inputs.getDay(11).then((res) => {
     res = +res;
