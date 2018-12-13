@@ -1,22 +1,26 @@
 const inputs = require('./Inputs');
 
-const toto = '/->-\\        \n' +
-  '|   |  /----\\\n' +
-  '| /-+--+-\\  |\n' +
-  '| | |  | v  |\n' +
-  '\\-+-/  \\-+--/\n' +
-  '  \\------/   ';
+
+const toto = '/>-<\\  \n' +
+  '|   |  \n' +
+  '| /<+-\\\n' +
+  '| | | v\n' +
+  '\\>+</ |\n' +
+  '  |   ^\n' +
+  '  \\<->/\n';
 
 const partOne = () => {
   inputs.getDay(13).then((res) => {
     let map = res.split('\n').map(e => e.split(''));
     let carts = {};
+    let nbCarts = 0;
     for (let r = 0; r < map.length; r++) {
       const row = map[r];
       for (let c = 0; c < row.length; c++) {
         if ('<>^v'.includes(row[c])) {
+          nbCarts++;
           carts[r + "," + c] = new Cart(r, c, row[c]);
-          if (row[c] === '>' || row[c] === '>') {
+          if (row[c] === '>' || row[c] === '<') {
             map[r][c] = "-"
           } else if (row[c] === '^' || row[c] === 'v') {
             map[r][c] = "|"
@@ -24,7 +28,9 @@ const partOne = () => {
         }
       }
     }
-    while (true) {
+    let firstCrash = true;
+    let lastkey = '';
+    while (nbCarts > 1) {
       const newCarts = {};
       for (let position of Object.keys(carts).sort((a, b) => {
         const br = +b.split(',')[0];
@@ -36,17 +42,29 @@ const partOne = () => {
         }
         return ar - br;
       })) {
+        if (!carts[position]) {
+          continue
+        }
         const newCart = carts[position].move(map);
         const newCartKey = newCart.r + "," + newCart.c;
-        if (newCarts[newCartKey]) {
-          console.log(newCartKey.split(',').reverse().join());
-          return
+        lastkey = newCartKey;
+        if (newCarts[newCartKey] || carts[newCartKey]) {
+          if (firstCrash) {
+            console.log(newCartKey.split(',').reverse().join());
+            firstCrash = false;
+          }
+          delete newCarts[newCartKey];
+          delete carts[newCartKey];
+          nbCarts -= 2;
+        } else {
+          newCarts[newCartKey] = newCart;
         }
-        carts[position] = null;
-        newCarts[newCartKey] = newCart;
+        delete carts[position];
       }
       carts = newCarts;
     }
+    const lastCart = Object.keys(carts)[0].split(',').reverse().join()
+    console.log(lastCart);
   })
     .catch(err => console.log(err))
 };
