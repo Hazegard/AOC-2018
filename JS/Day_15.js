@@ -44,8 +44,8 @@ const printMap = (places, units, round) => {
   console.log(units);
 };
 
-const partOne = () => {
-  inputs.getDay(15).then((res) => {
+const partOne = (atk = 3, isPartTwo) => {
+  return inputs.getDay(15).then((res) => {
     let nbGobs = 0;
     let nbElves = 0;
     const {places, gobs, elves} = res.split('\n')
@@ -53,7 +53,7 @@ const partOne = () => {
       .reduce((acc, curr, r) => {
         const {gobs, places, elves} = curr.reduce((acc, curr, c) => {
           if (curr === 'E') {
-            const elve = new Unit(r, c, 'E');
+            const elve = new Unit(r, c, 'E', atk);
             acc.elves.push(elve);
             nbElves++;
             return acc
@@ -87,6 +87,9 @@ const partOne = () => {
         }
         if (units.filter(u => u.type !== unit.type && !unit.isDead).length === 0) {
           const totalHp = units.reduce((acc, curr) => acc + curr.hp, 0);
+          if (isPartTwo) {
+            round--;
+          }
           console.log(totalHp * round);
           return Promise.resolve(totalHp)
         }
@@ -94,6 +97,9 @@ const partOne = () => {
         if (target.length > 0) {
           let tar = target[0];
           if (tar.receiveHit(unit.atk)) {
+            if (isPartTwo && tar.type === 'E') {
+              return Promise.resolve(false)
+            }
             places.add(tar.pos())
           }
         } else {
@@ -123,11 +129,11 @@ const partOne = () => {
 
 class Unit {
 
-  constructor(r, c, type) {
+  constructor(r, c, type, atk) {
     this.r = r;
     this.c = c;
     this.hp = 200;
-    this.atk = 3;
+    this.atk = type === 'G' ? 3 : atk;
     this.type = type;
     this.isDead = false;
   }
@@ -216,3 +222,16 @@ class Unit {
 }
 
 partOne();
+
+const partTwo = async () => {
+  let atk = 4;
+  while (true) {
+    const areAllElvesOK = await partOne(atk, true);
+    if (areAllElvesOK) {
+      return
+    }
+    atk++;
+  }
+};
+
+partTwo();
