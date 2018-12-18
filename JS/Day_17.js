@@ -136,14 +136,20 @@ const partOne = () => {
     fillFrom(grid, [500 - xMin, 0]);
 
     let water = 0;
+    let rest = 0;
     for (let y = yMin; y <= yMax; y++) {
       for (let x = 0; x <= xMax - xMin + 1; x++) {
-        if (grid[y][x] === resting || grid[y][x] === falling) {
+        if (grid[y][x] === resting) {
+          water++;
+          rest++;
+        }
+        if (grid[y][x] === falling) {
           water++;
         }
       }
     }
     console.log(water);
+    console.log(rest);
   })
     .catch(err => console.log(err));
 };
