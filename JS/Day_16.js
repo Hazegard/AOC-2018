@@ -68,6 +68,7 @@ const ops = [
   eqri,
   eqrr,
 ];
+module.exports.ops = ops;
 const partOne = () => {
   return inputs.getDay(16).then((res) => {
     const opPoss = {};
@@ -141,7 +142,8 @@ const partTwo = (dictOps) => {
     .catch(err => console.log(err));
 };
 
-
-partOne().then((ops) => {
-  partTwo(ops)
-});
+if (require.main === module) {
+  partOne().then((ops) => {
+    partTwo(ops)
+  });
+}
