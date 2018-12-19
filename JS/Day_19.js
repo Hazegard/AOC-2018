@@ -34,3 +34,19 @@ const partOne = () => {
 };
 
 partOne();
+
+const partTwo = (n) => {
+  const n2 = Math.floor(n / 2);
+  const factors = [];
+  for (let i = 1; i < n2; i++) {
+    if (n % i === 0) {
+      factors.push(i);
+    }
+  }
+  factors.push(n);
+  const res = factors.reduce((acc, curr) => acc + curr, 0);
+
+  console.log(res);
+};
+
+partTwo(10551339);
