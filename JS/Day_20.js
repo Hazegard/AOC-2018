@@ -35,6 +35,8 @@ const partOne = () => {
     });
     const response = [...map.keys()].reduce((acc, curr) => acc > map.get(curr).dist ? acc : map.get(curr).dist);
     console.log(response);
+    const responseTwo = [...map.keys()].filter(k => map.get(k).dist >= 1000).length;
+    console.log(responseTwo);
   })
     .catch(err => console.log(err));
 };
